@@ -47,9 +47,8 @@ int main(int argc, char** argv)
     /*------------------------- Measure cost of context switch -------------------------- */
     int fd1[2];
     int fd2[2];
-    char msg_buf[64];
     double avg_time;
-    const char* msg = "Hello child!";
+    char msg = 'H';
     cpu_set_t mask;
 
     CPU_ZERO(&mask);
@@ -66,8 +65,8 @@ int main(int argc, char** argv)
         (void)sched_setaffinity(getpid(), sizeof(mask), &mask);
         for(int i = 0; i < NUM_ITERS; ++i)
         {
-            (void)write(fd1[1], msg,         strlen(msg));
-            (void)read(fd2[0],  &msg_buf[0], sizeof(msg_buf));
+            (void)write(fd1[1], &msg, 1);
+            (void)read(fd2[0],  &msg, 1);
         }
         exit(0);
     }
@@ -75,8 +74,8 @@ int main(int argc, char** argv)
     {
         MEASURE_TIME(
             {
-                (void)read(fd1[0],  &msg_buf[0], sizeof(msg_buf));
-                (void)write(fd2[1], msg,         strlen(msg));
+                (void)read(fd1[0],  &msg, 1);
+                (void)write(fd2[1], &msg, 1);
             },
             CLOCK_MONOTONIC_RAW,
             &avg_time
