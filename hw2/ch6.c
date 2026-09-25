@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -7,6 +8,7 @@
 #include <time.h>
 #include <sched.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/errno.h>
 #include <sys/time.h>
 
@@ -29,16 +31,18 @@ for(int __i = 0; __i < NUM_ITERS; ++__i)\
 int main(int argc, char** argv)
 {
     /*----------------- Measure cost of syscall using clock_gettime ----------------------*/
-    int fd = open("scratch.txt", O_RDWR);
-    double avg_time;
-    if (fd < 0)
     {
-        fprintf(stderr, "%s", "Failed to get fd");
-    }
-    MEASURE_TIME((void)read(fd, NULL, 0), CLOCK_MONOTONIC_RAW, &avg_time);
-    printf("Avg Cost of read (in real time): %lf ns\n", avg_time);\
+        int fd = open("scratch.txt", O_RDWR);
+        double avg_time;
+        if (fd < 0)
+        {
+            fprintf(stderr, "%s", "Failed to get fd");
+        }
+        MEASURE_TIME((void)read(fd, NULL, 0), CLOCK_MONOTONIC_RAW, &avg_time);
+        printf("Avg Cost of read (in real time): %lf ns\n", avg_time);\
 
-    close(fd);
+        close(fd);
+    }
 
     /*------------------------- Measure cost of context switch -------------------------- */
     int fd1[2];
@@ -47,7 +51,6 @@ int main(int argc, char** argv)
     double avg_time;
     const char* msg = "Hello child!";
     cpu_set_t mask;
-    int n_bytes;
 
     CPU_ZERO(&mask);
     CPU_SET(0, &mask);
@@ -72,9 +75,9 @@ int main(int argc, char** argv)
     {
         MEASURE_TIME(
             {
-                (void)read(fd2[0],  &msg_buf[0], sizeof(msg_buf));
-                (void)write(fd1[1], msg,         strlen(msg));
-            }
+                (void)read(fd1[0],  &msg_buf[0], sizeof(msg_buf));
+                (void)write(fd2[1], msg,         strlen(msg));
+            },
             CLOCK_MONOTONIC_RAW,
             &avg_time
         );

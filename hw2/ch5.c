@@ -217,7 +217,7 @@ void test_fork_closing_stdout(void)
 
 void test_fork_pipe_two_children(void)
 {
-    int fds[2] = {-1, -1}; // 0 = read fd, 1 = write fd
+    int fds[2]; // 0 = read fd, 1 = write fd
     int rc = pipe(fds);
 
     if (rc < 0)
