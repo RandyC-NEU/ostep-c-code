@@ -277,6 +277,11 @@ int main(int argc, char** argv)
     }
     else
     {
+        if (!strcmp(argv[1], "-h"))
+        {
+            printf("%s\n", "Usage: ./bin5 [1-8]");
+            exit(0);
+        }
         long q = strtol(argv[1], NULL, 10);
         switch (q)
         {
@@ -322,7 +327,7 @@ int main(int argc, char** argv)
             }
             default:
             {
-                fprintf(stderr, "%s: %s\n", "Invalid option [must be 1-5]:", argv[1]);
+                fprintf(stderr, "%s: %s\n", "Invalid option [must be 1-8]", argv[1]);
                 exit(-1);
             }
 
