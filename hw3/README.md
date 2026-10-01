@@ -15,7 +15,7 @@ chmod +x ./q5.sh
 
 Note: Q5 produces a TSV compatible with gnuplot. To plot the data, use:
 ```
-gnuplot -e "set terminal pngcairo; set output 'q5.png'; set logscale x; set xlabel 'job length'; set ylabel 'unfairness'; plot 'q5.dat' with linespoints; pause -1"
+gnuplot -e "set terminal pngcairo; set output 'q5.png'; set logscale x; set xlabel 'job length'; set ylabel 'fairness'; plot 'q5.dat' with linespoints; pause -1"
 ```
 
 Required: python3/python3 alias for python
