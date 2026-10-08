@@ -6,7 +6,7 @@ int* ret_stack_ptr(void)
     return &ret;
 }
 
-int main()
+int main(void)
 {
     int* pRet = ret_stack_ptr();
     printf("Val of ret is: %d\n", *pRet);
