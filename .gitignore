@@ -1,1 +1,4 @@
 **/bin*
+**/val_catch
+**/memory_user
+**/valgrind_explorer
