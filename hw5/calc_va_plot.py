@@ -18,11 +18,10 @@ def main():
         print('Target path of graph png does not exist')
         return
 
-    one_k = 1024 # 1KB virtual address space size
+    one_k = 1024 # 1KB physical address space size
     n: int = 1000
     limits: List[int] = list(range(one_k+1))
     seeds = [1, 10, 100, 256, 512]
-    # build a separate list per seed; [[0] * k] * m would alias one list m times
     histos = [[0] * (one_k+1) for _ in seeds]
     frac_valid = [[0.0] * (one_k+1) for _ in seeds]
     for h, s in enumerate(seeds):
